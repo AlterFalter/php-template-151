@@ -1,6 +1,6 @@
 <?php
 
-namespace ihrname;
+namespace AlterFalter;
 
 /**
  * Simple Template-Engine which provides arguments into a template,

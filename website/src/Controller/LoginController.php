@@ -4,7 +4,7 @@ namespace AlterFalter\Controller;
 
 use AlterFalter\SimpleTemplateEngine;
 
-class IndexController 
+class LoginController 
 {
   /**
    * @var AlterFalter\SimpleTemplateEngine Template engines to render output
@@ -19,11 +19,7 @@ class IndexController
      $this->template = $template;
   }
 
-  public function homepage() {
-    echo "INDEX";
-  }
-
-  public function greet($name) {
-  	echo $this->template->render("hello.html.php", ["name" => $name]);
+  public function showLogin(){
+  	echo $this->template->render("login.html.php");
   }
 }
