@@ -4,10 +4,10 @@
 	</head>
 	<body>
 		Login Site
-		<form action="post">
+		<form action="/login" method="post">
 			<div>
-				<label>Username:</label>
-				<input type="text" name="username" />
+				<label>Email:</label>
+				<input type="text" name="email" value="<?= (isset($email) ? $email : "") ?>" />
 			</div>
 			<div>
 				<label>Password:</label>
