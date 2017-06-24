@@ -3,8 +3,6 @@
 SET NAMES utf8;
 SET time_zone = '+00:00';
 
-DROP DATABASE IF EXISTS `ZeusDb`;
-CREATE DATABASE `ZeusDb` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ZeusDb`;
 
 DROP TABLE IF EXISTS `file`;
