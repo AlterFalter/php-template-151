@@ -34,9 +34,10 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: app
+      MYSQL_DATABASE: ZeusDb
       MYSQL_ROOT_PASSWORD: my-secret-pw
     volumes:
+      - ${PWD}/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - db:/var/lib/mysql
     networks:
       - db
