@@ -22,14 +22,45 @@ class SimpleTemplateEngine
   }
   
   /**
-   * Renders a *.html.php file inside the template path
+   * Renders a *.html.php file inside the template path.
    * @return string
    */
-  public function render($template, array $arguments = []) 
+  public function renderPartialView($template, array $arguments = []) 
   {
     extract($arguments);
     ob_start();
     require($this->templatePath.$template);
     return ob_get_clean();
+  }
+  
+  /**
+   * Renders a *.html.php file inside the template path.
+   * Adds layout site for the view.
+   * @return string
+   */
+  public function renderView($template, array $arguments = [])
+  {
+  	extract($arguments);
+  	ob_start();
+    require($this->templatePath."layout/header.html.php");
+  	require($this->templatePath."layout/menu.html.php");
+  	require($this->templatePath.$template);
+    require($this->templatePath."layout/footer.html.php");
+  	return ob_get_clean();
+  }
+  
+  /**
+   * Renders a *.html.php file inside the template path.
+   * Adds layout site for the view.
+   * @return string
+   */
+  public function renderEditView($template, array $arguments = [])
+  {
+  	extract($arguments);
+  	ob_start();
+    require($this->templatePath."layout/header.html.php");
+    require($this->templatePath."layout/edit/menu.html.php");
+    require($this->templatePath.$template);
+  	return ob_get_clean();
   }
 }

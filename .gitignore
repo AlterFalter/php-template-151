@@ -1,3 +1,6 @@
+.settings/
+.buildpath
+.project
 .DS_Store
 /website/vendor
 /website/.buildpath

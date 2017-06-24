@@ -19,11 +19,18 @@ class IndexController
      $this->template = $template;
   }
 
-  public function homepage() {
-    echo "INDEX";
+  public function home()
+  {
+    echo $this->template->renderView("home.html.php");
   }
 
-  public function greet($name) {
-  	echo $this->template->render("hello.html.php", ["name" => $name]);
+  public function aboutus()
+  {
+    echo $this->template->renderView("aboutus.html.php");
+  }
+
+  public function notFound()
+  {
+    echo $this->template->renderView("notfound.html.php");
   }
 }
