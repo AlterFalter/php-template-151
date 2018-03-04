@@ -1,39 +1,96 @@
 <?php
 
-use AlterFalter\Controller;
-
 error_reporting(E_ALL);
+session_start();
 
 require_once("../vendor/autoload.php");
-$tmpl = new AlterFalter\SimpleTemplateEngine(__DIR__ . "/../templates/");
-$pdo = new \PDO(
-			"mysql:host=mariadb;dbname=app;charset=utf8",
-			"root",
-			"my-secret-pw",
-			[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
-		);
+require_once("../src/ErrorType.php");
+
+$factory = AlterFalter\Factory::createFromIniFile(__DIR__ . "/../config.ini");
+
+$isGet = $_SERVER['REQUEST_METHOD'] === "GET";
+$isPost = $_SERVER['REQUEST_METHOD'] === "POST";
 
 
-switch($_SERVER["REQUEST_URI"]) {
+$uri = strtok(
+	$_SERVER["REQUEST_URI"],
+	"?"
+);
+
+switch(strtolower($uri)) {
 	case "/":
-		(new Controller\IndexController($tmpl))->homepage();
+	case "/index":
+	case "/home":
+		$factory->getIndexController()->home();
+		break;
+	case "/aboutus":
+		$factory->getIndexController()->aboutus();
 		break;
 	case "/login":
-			$controller = (new Controller\LoginController($tmpl, $pdo));
-			if($_SERVER['REQUEST_METHOD'] === "GET") {
-				$controller->showLogin();
-			}
-			else {
-				$controller->login($_POST);
-			}
-			break;
-	default:
-		// Begrüsst User
-		$matches = [];
-		if(preg_match("|^/hello/(.+)$|", $_SERVER["REQUEST_URI"], $matches)) {
-			(new AlterFalter\Controller\IndexController($tmpl))->greet($matches[1]);
-			break;
+		if($isGet)
+		{
+			$factory->getLoginController()->loginGET();
 		}
-		echo "Not Found";
+		else if ($isPost)
+		{
+			$factory->getLoginController()->loginPOST($_POST);
+		}
+		break;
+	case "/register":
+		if ($isGet)
+		{
+			$factory->getLoginController()->registerGET();
+		}
+		else if ($isPost)
+		{
+			$factory->getLoginController()->registerPOST($_POST);
+		}
+		break;
+	case "/logout":
+		$factory->getLoginController()->logout();
+		break;
+	case "/forgotpassword":
+		if($isGet) {
+			$factory->getLoginController()->forgotPasswordGET();
+		}
+		else
+		{
+			$factory->getLoginController()->forgotPasswordPOST($_POST);
+		}
+		break;
+	case "/setpassword":
+		if ($isGet)
+		{
+			$factory->getLoginController()->setNewPasswordGET($_GET);
+		}
+		else
+		{
+			$factory->getLoginController()->setNewPasswordPOST($_POST);
+		}
+		break;
+	case "/drive":
+		$factory->getDriveController()->folder($_GET);
+		break;
+	case "/download":
+		$factory->getDriveController()->download($_POST);
+		break;
+	case "/renamefolder":
+		$factory->getDriveController()->renamefolder($_POST);
+		break;
+	case "/renamefile":
+		$factory->getDriveController()->renamefile($_POST);
+		break;
+	case "/relocatefolder":
+		$factory->getDriveController()->relocatefolder($_POST);
+		break;
+	case "/relocatefile":
+		$factory->getDriveController()->relocatefile($_POST);
+		break;
+	default:
+		$factory->getErrorController()->error(
+			ErrorType::NotFound,
+			"Requested site not found!"
+		);
+		break;
 }
 
